@@ -1,4 +1,4 @@
-import { float, Reader, ReadOffsets, short, uchar, uint64 } from "../common";
+import { float, Reader, SignedBytes, UnsignedBytes, short, uchar, uint64 } from "../common";
 import { Pascal64string, readPascal64string } from "../pascal64string";
 
 export interface FILE
@@ -53,7 +53,7 @@ export function readFILE(buffer: Reader): FILE
 {
     const file_format_revision = readPascal64string(buffer)
     const textureName = readPascal64string(buffer)
-    const unknown1 = buffer.readArray(13,ReadOffsets.float)
+    const unknown1 = buffer.readArray(13,SignedBytes.float)
     const dataFormat = readPascal64string(buffer)
     const dataFormatLengthPerPolygon = buffer.readUInt64()
     const nOfPolygons = buffer.readUInt64()
@@ -62,7 +62,7 @@ export function readFILE(buffer: Reader): FILE
     const polygon: FILE.POLYGON[] = []
     for(var i = 0;i < nOfPolygons;i++)
         polygon.push({
-            data: buffer.readUArray(Number(dataFormatLengthPerPolygon),ReadOffsets.uchar)
+            data: buffer.readUArray(Number(dataFormatLengthPerPolygon),UnsignedBytes.uchar)
         })
     const triangle: FILE.TRIANGLE[] = []
     for(var i = 0;i < nOfTriangles;i++)
@@ -88,7 +88,7 @@ export function readFILE(buffer: Reader): FILE
     const bone_properties: FILE.BONE_PROPERTIES[] = []
     for(var i = 0;i < nOfBones;i++)
         bone_properties.push({
-            unknown3: buffer.readArray(16,ReadOffsets.float)
+            unknown3: buffer.readArray(16,SignedBytes.float)
         })
     return {
         file_format_revision,

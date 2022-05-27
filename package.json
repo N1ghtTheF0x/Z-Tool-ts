@@ -4,12 +4,7 @@
   "description": "Modding Tool for the Lab Zero Games's Z-Engine",
   "main": "src/index.ts",
   "scripts": {
-    "gfs": "ts-node src/gfs/index.ts",
-    "gbs": "ts-node src/gbs/index.ts",
-    "sga": "ts-node src/sga/index.ts",
-    "sgi": "ts-node src/sgi/index.ts",
-    "sgm": "ts-node src/sgm/index.ts",
-    "sgs": "ts-node src/sgs/index.ts"
+    "start": "ts-node src/index.ts"
   },
   "author": "",
   "license": "ISC",

@@ -1,8 +1,17 @@
-import { getPath } from "../common";
-import { readFILE } from "./file";
+import { readFileSync } from "fs";
+import { Reader } from "../common";
+import { FILE, readFILE } from "./file";
 
-const { reader } = getPath()
-
-const file = readFILE(reader)
-
-console.dir(file,{depth:99})
+export class SGI
+{
+    readonly file: FILE
+    constructor(readonly path: string)
+    {
+        const reader = new Reader(readFileSync(path))
+        this.file = this.__readFile(reader)
+    }
+    private __readFile(buffer: Reader)
+    {
+        return readFILE(buffer)
+    }
+}

@@ -1,2 +1,11 @@
 node_modules
 package-lock.json
+
+*.gfs
+*.gbs
+*.sga
+*.sgi
+*.sgm
+*.sgs
+
+*.json

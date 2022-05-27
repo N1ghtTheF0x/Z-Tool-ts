@@ -1,4 +1,4 @@
-import { float, Reader, ReadOffsets, uint32, uint64 } from "../common";
+import { float, Reader, SignedBytes, uint32, uint64 } from "../common";
 import { Pascal64string, readPascal64string } from "../pascal64string";
 
 export interface FILE
@@ -27,7 +27,7 @@ export function readFILE(buffer: Reader): FILE
         bones.push({
             name: readPascal64string(buffer),
             parentBone: buffer.readUInt32(),
-            boneBaseMatrix: buffer.readArray(16,ReadOffsets.float)
+            boneBaseMatrix: buffer.readArray(16,SignedBytes.float)
         })
     return {
         file_format_revision,
