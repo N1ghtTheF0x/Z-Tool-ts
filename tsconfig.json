@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "module": "CommonJS",
+        "moduleResolution": "Node",
+        "target": "ESNext",
+        "jsx": "preserve",
+        "strict": true,
+        "lib": ["ESNext"]
+    },
+    "exclude": [
+        "node_modules",
+        "**/node_modules/*"
+    ]
+}

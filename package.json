@@ -1,0 +1,21 @@
+{
+  "name": "z-tool",
+  "version": "1.0.0",
+  "description": "Modding Tool for the Lab Zero Games's Z-Engine",
+  "main": "src/index.ts",
+  "scripts": {
+    "gfs": "ts-node src/gfs/index.ts",
+    "gbs": "ts-node src/gbs/index.ts",
+    "sga": "ts-node src/sga/index.ts",
+    "sgi": "ts-node src/sgi/index.ts",
+    "sgm": "ts-node src/sgm/index.ts",
+    "sgs": "ts-node src/sgs/index.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^17.0.35",
+    "ts-node": "^10.8.0",
+    "typescript": "^4.7.2"
+  }
+}
