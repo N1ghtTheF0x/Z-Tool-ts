@@ -1,5 +1,5 @@
-import { writeFileSync } from "fs";
-import { basename, extname, resolve } from "path";
+import { existsSync, mkdirSync, writeFileSync } from "fs";
+import { basename, dirname, extname, resolve } from "path";
 import { object2string } from "./common";
 import { GBS } from "./gbs";
 import { GFS } from "./gfs";
@@ -16,6 +16,12 @@ const unpackTypes: ReadonlyArray<string> = [
     "sgm",
     "sgs"
 ]
+
+if(process.argv.length == 2 || (process.argv.includes("-h") || process.argv.includes("--help")))
+{
+    console.info(`Z-Tool by N1ghtTheF0x\n\nUsage: z-tool-<os> <gbs|gfs|sga|sgi|sgm|sgs> <path> [<output>]\nExample: z-tool-win gfs levels.gfs levels_extracted`)
+    process.exit(0)
+}
 
 const file = process.argv[3]
 const unpackType = process.argv[2] ?? "gfs"
@@ -63,5 +69,18 @@ if(unpackTypes.includes(unpackType))
             obj = {}
             break
     }
-    writeFileSync(resolve(process.cwd(),`${filename}.json`),object2string(obj),"utf-8")
+    //writeFileSync(resolve(process.cwd(),`${filename}.json`),object2string(obj),"utf-8")
+    if(obj.constructor.name == "GFS")
+    {
+        const gfs: GFS = obj
+        const data = gfs.readData()
+        for(const filedata of data.data)
+        {
+            const filepath = resolve(oFolder,filedata.fileinfo.reference_path)
+            const dirpath = dirname(filepath)
+            if(!existsSync(dirpath)) mkdirSync(dirpath,{recursive:true})
+            writeFileSync(filepath,filedata.fdata)
+        }
+    }
+    process.exit(0)
 }

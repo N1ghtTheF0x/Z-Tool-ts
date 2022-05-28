@@ -1,17 +1,15 @@
-import { readFileSync } from "fs"
-import { Reader } from "../common"
+import { File } from "../common"
 import { readData } from "./data"
 import { Header, readHeader } from "./header"
 import { Info, readInfo } from "./info"
 
-export class GFS
+export class GFS extends File
 {
     readonly header: Header
     readonly info: Info
-    private reader: Reader
     constructor(readonly path: string)
     {
-        this.reader = new Reader(readFileSync(this.path))
+        super(path)
         this.header = this.__readHeader()
         this.info = this.__readInfo()
     }

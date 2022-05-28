@@ -5,7 +5,8 @@
         "target": "ESNext",
         "jsx": "preserve",
         "strict": true,
-        "lib": ["ESNext"]
+        "lib": ["ESNext"],
+        "outDir": "build"
     },
     "exclude": [
         "node_modules",

@@ -1,5 +1,4 @@
-import { existsSync, readFileSync } from "fs"
-import { basename, extname, resolve } from "path"
+import { readFileSync } from "fs"
 
 export type byte = number
 export type ubyte = number
@@ -67,16 +66,22 @@ export enum UnsignedBytes
 
 export type Bytes = SignedBytes | UnsignedBytes
 
-export class Reader
+export abstract class Offset
 {
     offset: number = 0
-    readonly buf: Buffer
-    endianess: Reader.Endianess
-    constructor(buf: Buffer,endianess: Reader.Endianess = "big")
+    endianess: Offset.Endianess
+    constructor(readonly buf: Buffer,endianess: Offset.Endianess = "big")
     {
-        this.buf = buf
         this.endianess = endianess
     }
+}
+export namespace Offset
+{
+    export type Endianess = "little" | "big"
+}
+
+export class Reader extends Offset
+{
     read(size: SignedBytes)
     {
         const value = this.endianess == "big" ? this.buf.readIntBE(this.offset,size) : this.buf.readIntLE(this.offset,size)
@@ -225,16 +230,45 @@ export class Reader
         return new Reader(buf,this.endianess)
     }
 }
-export namespace Reader
+
+export class Writer extends Offset
 {
-    export type Endianess = "little" | "big"
+    write(value: number,size: SignedBytes)
+    {
+        this.endianess == "big" ? this.buf.writeIntBE(value,this.offset,size) : this.buf.writeIntLE(value,this.offset,size)
+        this.offset += size
+        return this
+    }
+    writeU(value: number,size: UnsignedBytes)
+    {
+        this.endianess == "big" ? this.buf.writeUIntBE(value,this.offset,size) : this.buf.writeUIntLE(value,this.offset,size)
+        this.offset += size
+        return this
+    }
+}
+
+export class File
+{
+    private buffer: Buffer
+    protected reader: Reader
+    protected writer: Writer
+    constructor(readonly path: string,readonly mode: File.Mode = "r")
+    {
+        this.buffer = readFileSync(path)
+        this.reader = mode == "r" || mode == "rw" ? new Reader(this.buffer) : new Reader(Buffer.from([]))
+        this.writer = mode == "w" || mode == "rw" ? new Writer(this.buffer) : new Writer(Buffer.from([]))
+    }
+}
+export namespace File
+{
+    export type Mode = "r" | "w" | "rw"
 }
 
 export function object2string(obj: any)
 {
     return JSON.stringify(obj,(key,value) => {
         if(typeof value == "bigint") return `${value.toString()}n`
-        else if(value["buffer"] || key == "reader") return `Buffer`
+        else if(value.constructor.name == "Reader" || value.constructor.name == "Buffer") return `Buffer`
         else return value
     })
 }

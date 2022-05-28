@@ -1,17 +1,16 @@
-import { readFileSync } from "fs";
-import { Reader } from "../common";
+import { File } from "../common";
 import { FILE, readFILE } from "./file";
 
-export class SGM
+export class SGM extends File
 {
     readonly file: FILE
     constructor(readonly path: string)
     {
-        const reader = new Reader(readFileSync(path))
-        this.file = this.__readFile(reader)
+        super(path)
+        this.file = this.__readFile()
     }
-    private __readFile(buffer: Reader)
+    private __readFile()
     {
-        return readFILE(buffer)
+        return readFILE(this.reader)
     }
 }
