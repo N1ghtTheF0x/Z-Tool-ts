@@ -1,39 +1,56 @@
-import { File } from "../common";
-import { FontTableHeader, readFontTableHeader } from "./fonttableheader";
-import { Header, readHeader } from "./header";
+import { Reader } from "../common";
+import { ActionData } from "./action";
+import { MessageActionData } from "./action/message";
+import { SoundActionData } from "./action/sound";
+import { FourCC } from "./constants";
+import { ControlLayout } from "./layouts";
 
-export class GBS extends File
+export class OtterControlLayout implements ControlLayout
 {
-    readonly header: Header
-    readonly fonttables: ReadonlyArray<FontTableHeader>
-    constructor(readonly path: string)
+    mFourCC: FourCC
+    mDataSize: number
+    mCenterX: number
+    mCenterY: number
+    mX: number
+    mY: number
+    mWidth: number
+    mHeight: number
+    mRotation: number
+    constructor(buffer: Reader)
     {
-        super(path)
-        this.header = this.__readHeader()
-        this.fonttables = this.__readfth()
+        this.mFourCC = buffer.readString(4) as FourCC
     }
-    private __readHeader()
+}
+
+export class OtterActionData implements ActionData
+{
+    mFourCC: FourCC
+    mDataSize: number
+    constructor(buffer: Reader)
     {
-        return readHeader(this.reader)
+        this.mFourCC = buffer.readString(4) as FourCC
+        this.mDataSize = buffer.readUInt32()
     }
-    private __readfth()
+}
+
+export class OtterMessageActionData extends OtterActionData implements MessageActionData
+{
+    mMessageID: number
+    constructor(buffer: Reader)
     {
-        const fonttables = []
-        this.reader.endianess = "little"
-        try
-        {
-            const tag = this.reader.readUInt()
-            if(tag == 0x47464E54)
-            {
-                const fth = readFontTableHeader(this.reader)
-                fonttables.push(fth)
-            }
-        }
-        catch(e)
-        {
-            
-        }
-        this.reader.endianess = "big"
-        return fonttables
+        super(buffer)
+        this.mMessageID = buffer.readUInt32()
+    }
+}
+
+export class OtterSoundActionData extends OtterActionData implements SoundActionData
+{
+    mSoundID: number
+    mVolume: number
+    constructor(buffer: Reader)
+    {
+        super(buffer)
+        this.mSoundID = buffer.readUInt32()
+        this.mVolume = buffer.readFloat()
     }
 }

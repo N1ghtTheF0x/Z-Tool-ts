@@ -27,6 +27,8 @@ export type uint64 = bigint
 export type float = number
 export type double = number
 
+export type ustring = string
+
 export enum SignedBytes
 {
     byte = 1,
@@ -190,7 +192,7 @@ export class Reader extends Offset
     {
         return this.read(SignedBytes.double)
     }
-    readString(length: number)
+    readString(length: number): string
     {
         const a = this.readArray(length,SignedBytes.char)
         var s = ""
@@ -200,7 +202,7 @@ export class Reader extends Offset
         }
         return s
     }
-    readUString(length: number)
+    readUString(length: number): ustring
     {
         const a = this.readUArray(length,UnsignedBytes.uchar)
         var s = ""
@@ -268,7 +270,7 @@ export function object2string(obj: any)
 {
     return JSON.stringify(obj,(key,value) => {
         if(typeof value == "bigint") return `${value.toString()}n`
-        else if(value.constructor.name == "Reader" || value.constructor.name == "Buffer") return `Buffer`
+        else if(value?.type == "Buffer") return "Buffer"
         else return value
-    })
+    },"\t")
 }

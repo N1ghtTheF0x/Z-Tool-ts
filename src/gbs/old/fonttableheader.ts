@@ -1,18 +1,18 @@
-import { Reader, uint } from "../common"
+import { int32, Reader } from "../../common"
 import { CharData, readCharData } from "./chardata"
 
 export interface FontTableHeader
 {
     GFNT: string
-    Font_Length: uint
-    Font_ID: uint
+    Font_Length: int32
+    Font_ID: int32
     Font_Name: string // 64
-    Font_Size: uint
-    Atlas_Width: uint
-    Atlas_Height: uint
-    MaxTop: uint
-    Atlas_Count: uint
-    Chars_Count: uint
+    Font_Size: int32
+    Atlas_Width: int32
+    Atlas_Height: int32
+    MaxTop: int32
+    Atlas_Count: int32
+    Chars_Count: int32
     chb: FontTableHeader.CharBlock
 }
 
@@ -27,15 +27,15 @@ export namespace FontTableHeader
 export function readFontTableHeader(buffer: Reader): FontTableHeader
 {
     const GFNT = buffer.readString(4)
-    const Font_Length = buffer.readUInt()
-    const Font_ID = buffer.readUInt()
+    const Font_Length = buffer.readInt32()
+    const Font_ID = buffer.readInt32()
     const Font_Name = buffer.readString(64)
-    const Font_Size = buffer.readUInt()
-    const Atlas_Width = buffer.readUInt()
-    const Atlas_Height = buffer.readUInt()
-    const MaxTop = buffer.readUInt()
-    const Atlas_Count = buffer.readUInt()
-    const Chars_Count = buffer.readUInt()
+    const Font_Size = buffer.readInt32()
+    const Atlas_Width = buffer.readInt32()
+    const Atlas_Height = buffer.readInt32()
+    const MaxTop = buffer.readInt32()
+    const Atlas_Count = buffer.readInt32()
+    const Chars_Count = buffer.readInt32()
     const chb: FontTableHeader.CharBlock = {
         chsd: []
     }
