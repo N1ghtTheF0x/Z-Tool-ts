@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { basename, dirname, extname, resolve } from "path";
-import { object2string } from "./common";
+import { File, object2string } from "./common";
 import { GBS } from "./gbs";
 import { GFS } from "./gfs";
 import { SGA } from "./sga";
@@ -32,7 +32,7 @@ if(unpackTypes.includes(unpackType))
     const oFolder = resolve(process.cwd(),outputFolder)
     const fpath = resolve(process.cwd(),file)
     const filename = basename(file,extname(file))
-    var obj: any
+    var obj: File
     switch(unpackType)
     {
         case "gfs":
@@ -66,11 +66,10 @@ if(unpackTypes.includes(unpackType))
             break
         }
         default:
-            obj = {}
+            obj = {} as File
             break
     }
-    //writeFileSync(resolve(process.cwd(),`${filename}.json`),object2string(obj),"utf-8")
-    if(obj.constructor.name == "GFS")
+    if(obj instanceof GFS)
     {
         const gfs: GFS = obj
         const data = gfs.readData()
@@ -81,6 +80,10 @@ if(unpackTypes.includes(unpackType))
             if(!existsSync(dirpath)) mkdirSync(dirpath,{recursive:true})
             writeFileSync(filepath,filedata.fdata)
         }
+    }
+    else
+    {
+        writeFileSync(resolve(process.cwd(),`${filename}.json`),object2string(obj),"utf-8")
     }
     process.exit(0)
 }
