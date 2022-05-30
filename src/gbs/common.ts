@@ -1,3 +1,4 @@
+import { OtterControlLayout } from ".";
 import { float, int, int32, Reader, uint32 } from "../common";
 import { FourCC } from "./constants";
 import { ControlLayout } from "./layouts";
@@ -53,6 +54,6 @@ export class KeyFrameData
     }
     GetLayout(): ControlLayout
     {
-        throw new Error("Method not implemented!")
+        return new OtterControlLayout(new Reader(this.mBuffer))
     }
 }
