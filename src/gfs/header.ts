@@ -1,4 +1,4 @@
-import { int32, int64, Reader } from "../common";
+import { int32, int64, Reader, SignedBytes, Writer } from "../common";
 
 export interface Header
 {
@@ -26,4 +26,10 @@ export function readHeader(buffer: Reader): Header
         file_version,
         n_of_files
     }
+}
+
+export function writeHeader(data_offset: int32,n_of_files: int64)
+{
+    const buffer = new Writer(Buffer.alloc(0))
+    
 }

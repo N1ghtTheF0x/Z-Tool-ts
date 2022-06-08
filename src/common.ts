@@ -247,6 +247,58 @@ export class Writer extends Offset
         this.offset += size
         return this
     }
+    writeInt8(value: int8)
+    {
+        return this.write(value,SignedBytes.int8)
+    }
+    writeUInt8(value: uint8)
+    {
+        return this.writeU(value,UnsignedBytes.uint8)
+    }
+    writeByte(value: byte)
+    {
+        return this.write(value,SignedBytes.byte)
+    }
+    writeUByte(value: ubyte)
+    {
+        return this.writeU(value,UnsignedBytes.ubyte)
+    }
+    writeChar(value: char)
+    {
+        return this.write(value,SignedBytes.char)
+    }
+    writeUChar(value: uchar)
+    {
+        return this.writeU(value,UnsignedBytes.uchar)
+    }
+    writeInt16(value: int16)
+    {
+        return this.write(value,SignedBytes.int16)
+    }
+    writeUInt16(value: uint16)
+    {
+        return this.writeU(value,UnsignedBytes.uint16)
+    }
+    writeInt32(value: int32)
+    {
+        return this.write(value,SignedBytes.int32)
+    }
+    writeUInt32(value: uint32)
+    {   
+        return this.writeU(value,UnsignedBytes.uint32)
+    }
+    writeInt64(value: int64)
+    {
+        this.endianess == "big" ? this.buf.writeBigInt64BE(value,this.offset) : this.buf.writeBigInt64LE(value,this.offset)
+        this.offset += SignedBytes.int64
+        return this
+    }
+    writeUInt64(value: uint64)
+    {
+        this.endianess == "big" ? this.buf.writeBigUInt64BE(value,this.offset) : this.buf.writeBigUInt64LE(value,this.offset)
+        this.offset += UnsignedBytes.uint64
+        return this
+    }
 }
 
 export class File

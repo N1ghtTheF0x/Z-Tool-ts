@@ -19,6 +19,14 @@ export class OtterControlLayout implements ControlLayout
     constructor(buffer: Reader)
     {
         this.mFourCC = buffer.readString(4) as FourCC
+        this.mDataSize = buffer.readUInt32()
+        this.mCenterX = buffer.readFloat()
+        this.mCenterY = buffer.readFloat()
+        this.mX = buffer.readFloat()
+        this.mY = buffer.readFloat()
+        this.mWidth = buffer.readFloat()
+        this.mHeight = buffer.readFloat()
+        this.mRotation = buffer.readFloat()
     }
 }
 

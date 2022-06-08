@@ -7,8 +7,9 @@ import { SGA } from "./sga";
 import { SGI } from "./sgi";
 import { SGM } from "./sgm";
 import { SGS } from "./sgs";
+import { Wav } from "./wav";
 
-type FileType = "gbs" | "gfs" | "sga" | "sgi" | "sgm" | "sgs"
+type FileType = "gbs" | "gfs" | "sga" | "sgi" | "sgm" | "sgs" | "wav"
 type ActionType = "pack" | "unpack" | "analyse"
 
 export function main()
@@ -17,7 +18,7 @@ export function main()
     {
         console.info(`Z-Tool by N1ghtTheF0x
 
-        Usage: z-tool-<os> <pack|unpack|analyse> <gbs|gfs|sga|sgi|sgm|sgs> <path> [<output>]
+        Usage: z-tool-<os> <pack|unpack|analyse> <gbs|gfs|sga|sgi|sgm|sgs|wav> <path> [<output>]
         Example: z-tool-win unpack gfs levels.gfs levels_extracted`)
         process.exit(0)
     }
@@ -60,6 +61,11 @@ export function main()
         case "sgs":
         {
             obj = new SGS(fpath)
+            break
+        }
+        case "wav":
+        {
+            obj = new Wav(fpath)
             break
         }
         default:
